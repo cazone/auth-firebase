@@ -1,5 +1,5 @@
 <template>
-
+ 
       <q-card
           class="login-form"
           v-bind:style="
@@ -8,6 +8,7 @@
         >
           <q-img src="~assets/pharmacy.jpg"></q-img>
           <q-card-section>
+            
             <q-avatar
               size="74px"
               class="absolute"
@@ -22,8 +23,19 @@
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form class="q-gutter-md">
-              <q-input filled v-model="userForm.email" label="Email" lazy-rules />
+          
+  
+            <q-form        @submit="onSubmit" class="q-gutter-md">
+              <q-input 
+              filled 
+              v-model="userForm.email" 
+              label="Email" 
+              lazy-rules
+              :rules="[ 
+              val => val && val.length > 0 || 'El campo email obligatorio',
+              isValidEmail
+              ]"
+               />
 
               <q-input
                 type="password"
@@ -31,13 +43,14 @@
                 v-model="userForm.password"
                 label="Password"
                 lazy-rules
+                :rules="[ val => val && val.length > 0 || 'El campo password  obligatorio']"
               />
 
               <div>
                 <q-btn
                   label="Entrar"
-                  to="/dashboard"
-                  type="button"
+
+                  type="submit"
                   color="primary"
                   
                 />
@@ -52,31 +65,40 @@
 
 <script>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import useAuth from '../composables/useAuth'
-
+import useAuthfire from '../composables/useAuthFire'
+import { useQuasar } from 'quasar'
 
 
 export default {
 setup() {
 
-    const router = useRouter()
-    const { loginUser } = useAuth()
+   const $q = useQuasar()
+    const {loginUser} = useAuthfire()
 
     const userForm = ref({
         email: 'fernando@gmail.com',
         password: '123456',
     })
+    
 
 
     return {
             userForm,
-            onSubmit: async() => {
-                const { ok, message } = await loginUser( userForm.value )
+            onSubmit: async () => {
+               const {ok , message} = await   await   loginUser( userForm.value.email, userForm.value.password )
+         
+               if(!ok){
 
-                if ( !ok ) Swal.fire('Error', message, 'error' )
-                else router.push({ name: 'no-entry' })
-            }
+               } $q.notify({
+        message,
+          color: 'secondary'
+        })
+
+            },
+            isValidEmail( val ) {
+    const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+    return emailPattern.test(val) || 'El correo no parece ser válido';
+}
         }
     }
 }
