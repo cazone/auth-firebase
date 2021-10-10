@@ -1,31 +1,53 @@
 <template>
-    <span class="login100-form-title p-b-41">
-        Ingresar
-    </span>
-    <form class="login100-form validate-form p-b-33 p-t-5"
-        @submit.prevent="onSubmit">
 
-        <div class="wrap-input100 validate-input" data-validate = "Enter username">
-            <input v-model="userForm.email" class="input100" type="text" placeholder="Correo" required>
-            <span class="focus-input100" data-placeholder="&#xe82a;"></span>
-        </div>
+      <q-card
+          class="login-form"
+          v-bind:style="
+            $q.platform.is.mobile ? { width: '80%' } : { width: '30%' }
+          "
+        >
+          <q-img src="~assets/pharmacy.jpg"></q-img>
+          <q-card-section>
+            <q-avatar
+              size="74px"
+              class="absolute"
+              style="top: 0;right: 25px;transform: translateY(-50%);"
+            >
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+            </q-avatar>
+            <div class="row no-wrap items-center">
+              <div class="col text-h6 ellipsis">
+                Log in to Dashboard
+              </div>
+            </div>
+          </q-card-section>
+          <q-card-section>
+            <q-form class="q-gutter-md">
+              <q-input filled v-model="userForm.email" label="Email" lazy-rules />
 
-        <div class="wrap-input100 validate-input" data-validate="Enter password">
-            <input v-model="userForm.password" class="input100" type="password" placeholder="Contraseña" required>
-            <span class="focus-input100" data-placeholder="&#xe80f;"></span>
-        </div>
+              <q-input
+                type="password"
+                filled
+                v-model="userForm.password"
+                label="Password"
+                lazy-rules
+              />
 
-        <div class="container-login100-form-btn m-t-32">
-            <button class="login100-form-btn">
-                Login
-            </button>
+              <div>
+                <q-btn
+                  label="Entrar"
+                  to="/dashboard"
+                  type="button"
+                  color="primary"
+                  
+                />
 
-        </div>
-
-        <div class="container-login100-form-btn m-t-32">
-            <router-link :to="{ name: 'register' }">¿No tienes cuenta?</router-link>
-        </div>
-    </form>
+              </div>
+            </q-form>
+          </q-card-section>
+        </q-card>
+      
+ 
 </template>
 
 <script>
@@ -33,7 +55,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import useAuth from '../composables/useAuth'
 
-import Swal from 'sweetalert2'
+
 
 export default {
 setup() {

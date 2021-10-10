@@ -1,4 +1,5 @@
 
+import authRouter from 'src/modules/auth/router'
 const routes = [
   {
     path: '/',
@@ -6,6 +7,10 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Index.vue') }
     ]
+  },
+  {
+    path: '/auth',
+    ...authRouter,
   },
 
   // Always leave this as last one,
